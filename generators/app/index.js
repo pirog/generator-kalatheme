@@ -23,7 +23,7 @@ var KalathemeGenerator = yeoman.generators.Base.extend({
     this.log(this.yeoman);
 
     // replace it with a short and sweet description of your generator
-    this.log(chalk.magenta('You\'re using the fantastic Kalatheme generator.'));
+    this.log(chalk.magenta('You\'re build a subtheme for kalatheme, MAGIC!'));
 
     var prompts = [{
       type: 'confirm',
