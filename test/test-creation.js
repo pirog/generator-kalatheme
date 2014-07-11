@@ -11,7 +11,7 @@ describe('kalatheme generator', function () {
       }
 
       this.app = helpers.createGenerator('kalatheme:app', [
-        '../../app'
+        '../../generators/app'
       ]);
       done();
     }.bind(this));

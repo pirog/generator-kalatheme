@@ -24,14 +24,53 @@ var KalathemeGenerator = yeoman.generators.Base.extend({
     this.log(yosay('Welcome to the marvelous Kalatheme generator!'));
 
     var prompts = [{
+      type: 'input',
+      name: 'humanName',
+      message: 'What would to call your subtheme? (Human readable name)',
+      default: this.appname
+    },{
+      type: 'input',
+      name: 'name',
+      message: 'What is the machine name of your subtheme?',
+      default: this.appname
+      // validate: machineNameValidate()
+    },{
       type: 'confirm',
-      name: 'someOption',
-      message: 'Would you like to enable this option?',
+      name: 'sass',
+      message: 'Do you want to use SASS?',
       default: true
+    },{
+      type: 'confirm',
+      name: 'coffeescript',
+      message: 'Do you want to use CoffeeScript? (If not, we will give you vanilla JS.)',
+      default: true
+    },{
+      type: 'checkbox',
+      name: 'bower',
+      message: 'Select bower components you want to include:',
+      choices: [
+        {
+          name: 'bootstrap-sass-official'
+        },{
+          name: 'modernizr'
+        },{
+          name: 'fontawesome'
+        },{
+          name: 'respondJS'
+        },{
+          name: 'yepnope'
+        }
+      ],
+      default: this.choices
     }];
 
     this.prompt(prompts, function (props) {
-      this.someOption = props.someOption;
+      this.humanName = props.humanName;
+      this.name = props.name;
+      this.sass = props.sass;
+      this.coffeescript = props.coffeescript;
+      this.bower = props.bower;
+
 
       done();
     }.bind(this));
