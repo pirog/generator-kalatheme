@@ -8,7 +8,7 @@ var chalk = require('chalk');
 
 var KalathemeGenerator = yeoman.generators.Base.extend({
   init: function () {
-    this.pkg = require('../package.json');
+    this.pkg = require('../../package.json');
 
     this.on('end', function () {
       if (!this.options['skip-install']) {
@@ -35,58 +35,42 @@ var KalathemeGenerator = yeoman.generators.Base.extend({
       default: this.appname
       // validate: machineNameValidate()
     },{
-      type: 'confirm',
-      name: 'sass',
-      message: 'Do you want to use SASS?',
-      default: true
+      type: 'list',
+      name: 'css',
+      message: 'In what format would you like the use for stylesheets?',
+      choices: ['sass', 'less', 'stylus', 'css'],
+      default: 'sass'
     },{
       type: 'confirm',
       name: 'coffeescript',
       message: 'Do you want to use CoffeeScript? (If not, we will give you vanilla JS.)',
       default: true
-    },{
-      type: 'checkbox',
-      name: 'bower',
-      message: 'Select bower components you want to include:',
-      choices: [
-        {
-          name: 'bootstrap-sass-official'
-        },{
-          name: 'modernizr'
-        },{
-          name: 'fontawesome'
-        },{
-          name: 'respondJS'
-        },{
-          name: 'yepnope'
-        }
-      ],
-      default: this.choices
     }];
 
     this.prompt(prompts, function (props) {
+      // Sets this
       this.humanName = props.humanName;
-      this.name = props.name;
-      this.sass = props.sass;
+      this.appname = props.name;
+      this.css = props.css;
       this.coffeescript = props.coffeescript;
       this.bower = props.bower;
 
-
+      this.config.save(props);
       done();
     }.bind(this));
   },
 
   app: function () {
-    this.mkdir('app');
-    this.mkdir('app/templates');
-
-    this.copy('_package.json', 'package.json');
-    this.copy('_bower.json', 'bower.json');
-  },
-
-  projectfiles: function () {
     this.copy('editorconfig', '.editorconfig');
     this.copy('jshintrc', '.jshintrc');
+    this.template('_package.json', 'package.json');
+    this.template('_bower.json', 'bower.json');
+    this.composeWith('bootstrap:app',{
+      options: {
+        format: this.css
+      }
+    });
+    this.template('_template.php', 'template.php')
   }
 });
 
