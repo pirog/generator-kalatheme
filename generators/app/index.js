@@ -70,7 +70,10 @@ var KalathemeGenerator = yeoman.generators.Base.extend({
         format: this.css
       }
     });
-    this.template('_template.php', 'template.php')
+    if (this.css === 'sass') {
+      this.directory('scss','scss')
+    }
+    this.copy('_template.php', 'template.php')
   }
 });
 
