@@ -74,12 +74,14 @@ var KalathemeGenerator = yeoman.generators.Base.extend({
   app: function () {
     this.copy('editorconfig', '.editorconfig');
     this.copy('jshintrc', '.jshintrc');
+    this.copy('gitignore', '.gitignore');
     this.template('_package.json', 'package.json');
     this.template('_bower.json', 'bower.json');
     this.mkdir('dist');
     this.template('_template.php', 'template.php');
     this.template('_subtheme.info', this.appname + '.info');
   },
+
   /**
    * Scaffold out the styles for the subtheme.
    */
@@ -94,6 +96,9 @@ var KalathemeGenerator = yeoman.generators.Base.extend({
     }
   },
 
+  /**
+   * Scaffold out the theme's javascript assets.
+   */
   scripts: function () {
     this.mkdir('scripts');
     // Generic file extension.

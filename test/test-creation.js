@@ -9,24 +9,40 @@ describe('kalatheme generator', function () {
       if (err) {
         return done(err);
       }
+      // Create the apps dependents.
+      var deps = [
+        '../../generators/app',
+        [helpers.createDummyGenerator(), 'bootstrap:app']
+      ];
 
-      this.app = helpers.createGenerator('kalatheme:app', [
-        '../../generators/app'
-      ]);
+      this.app = helpers.createGenerator('kalatheme:app', deps);
       done();
     }.bind(this));
   });
 
   it('creates expected files', function (done) {
     var expected = [
-      // add files you expect to exist here.
+      // Add files you expect to exist here.
       '.jshintrc',
       '.editorconfig',
+      'template.php',
+      'bower.json',
+      'package.json',
+      'my_awesome_theme.info',
+      '.gitignore',
+      'scripts/index.coffee',
+      'scss/main.scss'
     ];
 
     helpers.mockPrompt(this.app, {
-      'someOption': true
+      'humanName': 'My Awesome Theme',
+      'name': 'my_awesome_theme',
+      'description': 'An awesome theme!',
+      'css' : 'sass',
+      'coffeescript': true,
+      'browserify': true
     });
+
     this.app.options['skip-install'] = true;
     this.app.run({}, function () {
       helpers.assertFile(expected);
