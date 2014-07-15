@@ -1,10 +1,10 @@
 {
   "name": "generator-kalatheme",
   "version": "0.0.0",
-  "description": "Yeoman generator",
+  "description": "Kalatheme subtheme generator powered by yeoman",
   "license": "MIT",
   "main": "generators/app/index.js",
-  "repository": "bassettsj/generator-kalatheme",
+  "repository": "kalamuna/generator-kalatheme",
   "author": {
     "name": "Steven Bassett",
     "email": "steven.j.bassett@gmail.com",
@@ -17,7 +17,7 @@
     "test": "gulp tests"
   },
   "files": [
-    "app"
+    "generators/app"
   ],
   "keywords": [
     "yeoman-generator"
