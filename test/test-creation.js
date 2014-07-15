@@ -31,7 +31,9 @@ describe('kalatheme generator', function () {
       'my_awesome_theme.info',
       '.gitignore',
       'scripts/index.coffee',
-      'scss/main.scss'
+      'scss/main.scss',
+      'dist/README.md',
+      'templates/README.md'
     ];
 
     helpers.mockPrompt(this.app, {

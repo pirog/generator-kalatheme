@@ -77,9 +77,7 @@ var KalathemeGenerator = yeoman.generators.Base.extend({
     this.copy('gitignore', '.gitignore');
     this.template('_package.json', 'package.json');
     this.template('_bower.json', 'bower.json');
-    this.mkdir('dist');
-    this.template('_template.php', 'template.php');
-    this.template('_subtheme.info', this.appname + '.info');
+    this.directory('dist', 'dist');
   },
 
   /**
@@ -109,6 +107,14 @@ var KalathemeGenerator = yeoman.generators.Base.extend({
     else {
       this.template('script/_vanilla' + ext, 'script/' + this._.this.appname  + ext);
     }
+  },
+  /**
+   * PHP related build tasks.
+   */
+  php: function () {
+    this.directory('templates', 'templates');
+    this.template('_template.php', 'template.php');
+    this.template('_subtheme.info', this.appname + '.info');
   }
 });
 
