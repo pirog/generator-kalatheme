@@ -1,4 +1,4 @@
-# generator-kalatheme [![Build Status](https://secure.travis-ci.org/bassettsj/generator-kalatheme.png?branch=master)](https://travis-ci.org/bassettsj/generator-kalatheme)
+# generator-kalatheme [![Build Status](https://travis-ci.org/kalamuna/generator-kalatheme.svg)](https://travis-ci.org/kalamuna/generator-kalatheme)
 
 > [Yeoman](http://yeoman.io) generator
 
