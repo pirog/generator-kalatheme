@@ -1,3 +1,8 @@
+###*
+ @file
+ Index file for the theme's JS bunlde.
+###
+
 'use strict'
-bootstrap = require('bootstrap')
+require('bootstrap')()
 boostrap()

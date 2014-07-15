@@ -1,4 +1,6 @@
-
+###*
+Theme's coffeescript file.
+###
 (($) ->
   $ ->
     Drupal = window.Drupal || behaviours: { attach: {} }

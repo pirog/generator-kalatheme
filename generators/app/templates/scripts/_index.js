@@ -1,4 +1,8 @@
+/**
+ * @file
+ * Index file for the theme's JS bunlde.
+ */
+
 'use strict';
 
-var $ = require('jquery'),
-boostrap = require('bootstrap');
+require('bootstap')();

@@ -28,29 +28,29 @@ var KalathemeGenerator = yeoman.generators.Base.extend({
       name: 'humanName',
       message: 'What would to call your subtheme? (Human readable name)',
       default: this.appname
-    },{
+    }, {
       type: 'input',
       name: 'name',
       message: 'What is the machine name of your subtheme?',
       default: this.appname
       // @todo: Add a validation function.
-    },{
+    }, {
       type: 'input',
       name: 'description',
       message: 'Subtheme description:',
       default: 'An aweseome theme powered by kalatheme and yeoman!'
-    },{
+    }, {
       type: 'list',
       name: 'css',
       message: 'In what format would you like the use for stylesheets?',
       choices: ['sass', 'less', 'stylus', 'css'],
       default: 'sass'
-    },{
+    }, {
       type: 'confirm',
       name: 'coffeescript',
       message: 'Do you want to use CoffeeScript? (If not, we will give you vanilla JS.)',
       default: true
-    },{
+    }, {
       type: 'confirm',
       name: 'browserify',
       message: 'Do you want to use CommonJS style modules with browserify?',
@@ -86,13 +86,13 @@ var KalathemeGenerator = yeoman.generators.Base.extend({
    * Scaffold out the styles for the subtheme.
    */
   styles: function () {
-    this.composeWith('bootstrap:app',{
+    this.composeWith('bootstrap:app', {
       options: {
         format: this.css
       }
     });
     if (this.css === 'sass') {
-      this.directory('scss','scss');
+      this.directory('scss', 'scss');
     }
   },
 
@@ -102,9 +102,9 @@ var KalathemeGenerator = yeoman.generators.Base.extend({
   scripts: function () {
     this.mkdir('scripts');
     // Generic file extension.
-    var ext = this.coffeescript ? 'coffee' : 'js'
+    var ext = this.coffeescript ? 'coffee' : 'js';
     if (this.browserify) {
-      this.template('scripts/_index.' + ext,'scripts/index.' + ext)
+      this.template('scripts/_index.' + ext, 'scripts/index.' + ext);
     }
     else {
       this.template('script/_vanilla' + ext, 'script/' + this._.this.appname  + ext);
