@@ -1,9 +1,9 @@
 'use strict';
-var util = require('util');
-var path = require('path');
+// var util = require('util');
+// var path = require('path');
 var yeoman = require('yeoman-generator');
 var yosay = require('yosay');
-var chalk = require('chalk');
+// var chalk = require('chalk');
 
 
 var KalathemeGenerator = yeoman.generators.Base.extend({
@@ -33,7 +33,12 @@ var KalathemeGenerator = yeoman.generators.Base.extend({
       name: 'name',
       message: 'What is the machine name of your subtheme?',
       default: this.appname
-      // validate: machineNameValidate()
+      // @todo: Add a validation function.
+    },{
+      type: 'input',
+      name: 'description',
+      message: 'Subtheme description:',
+      default: 'An aweseome theme powered by kalatheme and yeoman!'
     },{
       type: 'list',
       name: 'css',
@@ -45,36 +50,62 @@ var KalathemeGenerator = yeoman.generators.Base.extend({
       name: 'coffeescript',
       message: 'Do you want to use CoffeeScript? (If not, we will give you vanilla JS.)',
       default: true
+    },{
+      type: 'confirm',
+      name: 'browserify',
+      message: 'Do you want to use CommonJS style modules with browserify?',
+      default: true
     }];
 
     this.prompt(prompts, function (props) {
-      // Sets this
+      // Sets the generator properties.
       this.humanName = props.humanName;
       this.appname = props.name;
       this.css = props.css;
+      this.description = props.description;
       this.coffeescript = props.coffeescript;
-      this.bower = props.bower;
-
-      this.config.save(props);
+      this.browserify = props.browserify;
       done();
     }.bind(this));
   },
-
+  /**
+   * Scaffold out the common components.
+   */
   app: function () {
     this.copy('editorconfig', '.editorconfig');
     this.copy('jshintrc', '.jshintrc');
     this.template('_package.json', 'package.json');
     this.template('_bower.json', 'bower.json');
+    this.mkdir('dist');
+    this.template('_template.php', 'template.php');
+    this.template('_subtheme.info', this.appname + '.info');
+  },
+  /**
+   * Scaffold out the styles for the subtheme.
+   */
+  styles: function () {
     this.composeWith('bootstrap:app',{
       options: {
         format: this.css
       }
     });
     if (this.css === 'sass') {
-      this.directory('scss','scss')
+      this.directory('scss','scss');
     }
-    this.copy('_template.php', 'template.php')
+  },
+
+  scripts: function () {
+    this.mkdir('scripts');
+    // Generic file extension.
+    var ext = this.coffeescript ? 'coffee' : 'js'
+    if (this.browserify) {
+      this.template('scripts/_index.' + ext,'scripts/index.' + ext)
+    }
+    else {
+      this.template('script/_vanilla' + ext, 'script/' + this._.this.appname  + ext);
+    }
   }
 });
+
 
 module.exports = KalathemeGenerator;

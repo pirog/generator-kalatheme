@@ -1,5 +1,5 @@
 <?php
 /**
  * @file
- * Primary pre/preprocess functions and alterations for <%= appname =>
+ * Primary pre/preprocess functions and alterations for <%= appname %>
  */

@@ -1,0 +1,7 @@
+name = <%= humanName %>
+description = "<%= description %>"
+project = <%= _.slugify(appname) %>
+core = 7.x
+php = 5.3
+
+regions = content
