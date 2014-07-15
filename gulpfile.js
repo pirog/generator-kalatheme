@@ -10,7 +10,7 @@ paths = {
     'test/**/*.js',
     'gulpfile.js'
     ],
-  tests: 'test/**/*-test.js'
+  tests: 'test/**/test-*.js'
 },
 stylish = require('jshint-stylish');
 
