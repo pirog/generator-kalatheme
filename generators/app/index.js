@@ -5,6 +5,7 @@ var yeoman = require('yeoman-generator');
 var yosay = require('yosay');
 // var chalk = require('chalk');
 
+var appNameValidation = require('./appNameValidation');
 
 var KalathemeGenerator = yeoman.generators.Base.extend({
   init: function () {
