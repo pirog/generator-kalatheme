@@ -1,6 +1,6 @@
 {
   "name": "generator-kalatheme",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Kalatheme subtheme generator powered by yeoman",
   "license": "MIT",
   "main": "generators/app/index.js",
@@ -14,7 +14,7 @@
     "node": ">=0.10.0"
   },
   "scripts": {
-    "test": "gulp tests"
+    "test": "gulp ci"
   },
   "files": [
     "generators/app"
