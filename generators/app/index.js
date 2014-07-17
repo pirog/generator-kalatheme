@@ -28,15 +28,15 @@ var KalathemeGenerator = yeoman.generators.Base.extend({
       type: 'input',
       name: 'humanName',
       message: 'What would to call your subtheme? (Human readable name)',
-      default:  _.humanize(this.appname)
+      default:  this._.humanize(this.appname)
     }, {
       type: 'input',
       name: 'name',
       message: 'What is the machine name of your subtheme?',
       default: this.appname,
-      validate: appNameValidation(input),
-      filter: function () {
-        [^a-z0-9]+
+      validate: appNameValidation,
+      filter: function (input) {
+        return input.toLowerCase().replace(/[^a-z0-9]+/,'_').substr(0,32);
       }
     }, {
       type: 'input',

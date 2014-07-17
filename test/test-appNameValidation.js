@@ -9,6 +9,7 @@ invalidNames;
 describe('machine name validation', function () {
 
   beforeEach(function () {
+
     validNames = [
       'my_awesome_theme',
       'nooooob',
@@ -16,29 +17,39 @@ describe('machine name validation', function () {
       'greenbell',
       'my_theme'
     ];
+
     invalidNames = [
       'kalatheme',
       'MY-Awesome-Theme',
-      '000101',
-      '_foobar',
-      '_',
+      '+000101',
+      '!foobar',
+      '000000000000000000000000000000000000000000000',
       'drupal'
     ];
   });
 
   it('returns true for valid names', function () {
-
+    var foundInvalid = false;
     validNames.forEach(function (name) {
-      assert(appNameValidation(name)).equal(true);
+      if (!appNameValidation(name)) {
+        foundInvalid = true;
+        return;
+      }
     });
 
+    assert.ok(!foundInvalid, 'All the names were valid');
   });
 
   it('returns false for invalid names', function () {
-
+    var foundValid = false;
     invalidNames.forEach(function (name) {
-      assert(appNameValidation(name)).equal(false);
+      if (appNameValidation(name)) {
+        foundValid = true;
+        return;
+      }
     });
+
+    assert.ok(!foundValid, 'All the names were invalid');
 
   });
 });
