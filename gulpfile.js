@@ -7,6 +7,7 @@ stylish = require('jshint-stylish'),
 paths = {
   scripts: [
     'generators/**/*.js',
+    '!generators/templates/**/*.js',
     'test/**/*.js',
     'gulpfile.js'
   ],
