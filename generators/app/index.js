@@ -1,9 +1,10 @@
 'use strict';
 
 var yeoman = require('yeoman-generator'),
-yosay = require('yosay');
-
-var appNameValidation = require('./appNameValidation');
+yosay = require('yosay'),
+Tree = require('ast-query'),
+file = require('yeoman-generator').file,
+appNameValidation = require('./appNameValidation');
 
 var KalathemeGenerator = yeoman.generators.Base.extend({
   init: function () {
@@ -21,12 +22,6 @@ var KalathemeGenerator = yeoman.generators.Base.extend({
         this.installDevDep();
       }
     });
-
-    this.sassTask = function() {
-      this.copy('grunt/sass.js','grunt/sass.js');
-      this.npmDevDep.push('grunt-sass');
-    };
-
   },
 
   askFor: function () {
@@ -145,15 +140,38 @@ var KalathemeGenerator = yeoman.generators.Base.extend({
 
   gruntfile: function() {
     if (!this.buildSystem) { return; }
+
+
+
     this.npmDevDep = this.npmDevDep ? this.npmDevDep : [];
     this.npmDevDep.push('grunt');
     this.npmDevDep.push('load-grunt-config');
     this.dest.mkdir('grunt');
     this.copy('default-gruntfile.js','Gruntfile.js');
+    this.copy('gruntpaths.json', '.gruntpaths.json');
+    this.copy('grunt/aliases.js','grunt/aliases.js');
+
+    /**
+     * Helper method to edit the aliases grunt config as we add tasks.
+     */
+    this.addTaskAlias = function (alias, task) {
+      var _this = this;
+      var getAliases = function() {
+        return new Tree(_this.dest.read('grunt/aliases.js'));
+      };
+      var aliases = getAliases();
+      aliases.assignment('module.exports').key(alias).append(task);
+    };
+
+    this.sassTask = function() {
+      this.copy('grunt/sass.js','grunt/sass.js');
+      this.npmDevDep.push('grunt-sass');
+    };
+
     // Only add for SASS. Others might be supported later.
-    if (this.css === 'sass') { this.sassTask(); }
-
-
+    if (this.css === 'sass') {
+      this.sassTask();
+    }
 
 
   }
