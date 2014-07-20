@@ -1,9 +1,7 @@
 'use strict';
-// var util = require('util');
-// var path = require('path');
-var yeoman = require('yeoman-generator');
-var yosay = require('yosay');
-// var chalk = require('chalk');
+
+var yeoman = require('yeoman-generator'),
+yosay = require('yosay');
 
 var appNameValidation = require('./appNameValidation');
 
@@ -11,11 +9,24 @@ var KalathemeGenerator = yeoman.generators.Base.extend({
   init: function () {
     this.pkg = require('../../package.json');
 
+    this.installDevDep = function () {
+      if (this.npmDevDep.length < 1) { return; }
+      var done = this.async();
+      this.npmInstall(this.npmDevDep, {saveDev: true}, done());
+    };
+
     this.on('end', function () {
       if (!this.options['skip-install']) {
         this.installDependencies();
+        this.installDevDep();
       }
     });
+
+    this.sassTask = function() {
+      this.copy('grunt/sass.js','grunt/sass.js');
+      this.npmDevDep.push('grunt-sass');
+    };
+
   },
 
   askFor: function () {
@@ -49,15 +60,25 @@ var KalathemeGenerator = yeoman.generators.Base.extend({
       message: 'In what format would you like the use for stylesheets?',
       choices: ['sass', 'less', 'stylus', 'css'],
       default: 'sass'
-    }, {
-      type: 'confirm',
-      name: 'coffeescript',
-      message: 'Do you want to use CoffeeScript? (If not, we will give you vanilla JS.)',
-      default: true
-    }, {
+    },
+    /**
+     * @todo Adding coffeescript support after initial release.
+     */
+    // {
+    //   type: 'confirm',
+    //   name: 'coffeescript',
+    //   message: 'Do you want to use CoffeeScript? (If not, we will give you vanilla JS.)',
+    //   default: true
+    // },
+    {
       type: 'confirm',
       name: 'browserify',
       message: 'Do you want to use CommonJS style modules with browserify?',
+      default: true
+    },{
+      type: 'confirm',
+      name: 'buildSystem',
+      message: 'Do you want to use grunt to help build your theme?',
       default: true
     }];
 
@@ -67,8 +88,9 @@ var KalathemeGenerator = yeoman.generators.Base.extend({
       this.appname = props.name;
       this.css = props.css;
       this.description = props.description;
-      this.coffeescript = props.coffeescript;
+      this.coffeescript = false; // props.coffeescript;
       this.browserify = props.browserify;
+      this.buildSystem = props.buildSystem;
       done();
     }.bind(this));
   },
@@ -119,6 +141,21 @@ var KalathemeGenerator = yeoman.generators.Base.extend({
     this.directory('templates', 'templates');
     this.template('_template.php', 'template.php');
     this.template('_subtheme.info', this.appname + '.info');
+  },
+
+  gruntfile: function() {
+    if (!this.buildSystem) { return; }
+    this.npmDevDep = this.npmDevDep ? this.npmDevDep : [];
+    this.npmDevDep.push('grunt');
+    this.npmDevDep.push('load-grunt-config');
+    this.dest.mkdir('grunt');
+    this.copy('default-gruntfile.js','Gruntfile.js');
+    // Only add for SASS. Others might be supported later.
+    if (this.css === 'sass') { this.sassTask(); }
+
+
+
+
   }
 });
 

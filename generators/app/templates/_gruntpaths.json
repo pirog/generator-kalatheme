@@ -1,0 +1,6 @@
+{
+  "build": "dist",
+  "scripts" : "scripts",
+  "styles" : "<%= styles %>",
+  "images" : "img_src"
+}
