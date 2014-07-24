@@ -60,6 +60,10 @@ describe('kalatheme generator', function () {
 
     this.app.run({}, function () {
       assert.fileContent('Gruntfile.js', /load-grunt-config/);
+      helpers.assertFile('./grunt/sass.js');
+      helpers.assertFile('./grunt/aliases.js');
+      helpers.assertFile('./grunt/browserify.js')
+      helpers.assertFile('./grunt/uglify.js')
       done();
     });
 
