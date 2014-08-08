@@ -2,9 +2,10 @@
 
 var yeoman = require('yeoman-generator'),
 yosay = require('yosay'),
-Tree = require('ast-query'),
-file = require('yeoman-generator').file,
 appNameValidation = require('./appNameValidation');
+
+var cache = {};
+
 
 var KalathemeGenerator = yeoman.generators.Base.extend({
   init: function () {
@@ -42,7 +43,7 @@ var KalathemeGenerator = yeoman.generators.Base.extend({
       default: this.appname,
       validate: appNameValidation,
       filter: function (input) {
-        return input.toLowerCase().replace(/[^a-z0-9]+/,'_').substr(0,32);
+        return input.toLowerCase().replace(/[^a-z0-9]+/, '_').substr(0, 32);
       }
     }, {
       type: 'input',
@@ -50,30 +51,24 @@ var KalathemeGenerator = yeoman.generators.Base.extend({
       message: 'Subtheme description:',
       default: 'An aweseome theme powered by kalatheme and yeoman!'
     }, {
+      type: 'input',
+      name: 'repo',
+      meassage: 'Repository URL:'
+    }, {
       type: 'list',
       name: 'css',
       message: 'In what format would you like the use for stylesheets?',
-      choices: ['sass', 'less', 'stylus', 'css'],
+      choices: ['sass', 'css'],
       default: 'sass'
-    },
-    /**
-     * @todo Adding coffeescript support after initial release.
-     */
-    // {
-    //   type: 'confirm',
-    //   name: 'coffeescript',
-    //   message: 'Do you want to use CoffeeScript? (If not, we will give you vanilla JS.)',
-    //   default: true
-    // },
-    {
+    }, {
       type: 'confirm',
       name: 'browserify',
       message: 'Do you want to use CommonJS style modules with browserify?',
       default: true
-    },{
+    }, {
       type: 'confirm',
       name: 'buildSystem',
-      message: 'Do you want to use grunt to help build your theme?',
+      message: 'Do you want to use gulp to help build your theme?',
       default: true
     }];
 
@@ -86,6 +81,7 @@ var KalathemeGenerator = yeoman.generators.Base.extend({
       this.coffeescript = false; // props.coffeescript;
       this.browserify = props.browserify;
       this.buildSystem = props.buildSystem;
+      this.repo = props.repo;
       done();
     }.bind(this));
   },
@@ -99,6 +95,7 @@ var KalathemeGenerator = yeoman.generators.Base.extend({
     this.template('_package.json', 'package.json');
     this.template('_bower.json', 'bower.json');
     this.directory('dist', 'dist');
+    this.template('_README.md', 'README');
   },
 
   /**
@@ -138,42 +135,33 @@ var KalathemeGenerator = yeoman.generators.Base.extend({
     this.template('_subtheme.info', this.appname + '.info');
   },
 
-  gruntfile: function() {
+  gulp: function () {
     if (!this.buildSystem) { return; }
 
+    var gulpModules = [
+      'gulp',
+      'del',
+      'gulp-autoprefixer',
+      'gulp-browserify',
+      'gulp-csscomb',
+      'gulp-csslint',
+      'gulp-cssmin',
+      'gulp-gh-pages',
+      'gulp-kss',
+      'gulp-rename',
+      'gulp-sass',
+      'gulp-sourcemaps',
+      'gulp-uglify',
+      'gulp-imagemin',
+      'gulp-newer',
+      'yargs'
+    ];
 
 
     this.npmDevDep = this.npmDevDep ? this.npmDevDep : [];
-    this.npmDevDep.push('grunt');
-    this.npmDevDep.push('load-grunt-config');
-    this.dest.mkdir('grunt');
-    this.copy('default-gruntfile.js','Gruntfile.js');
-    this.copy('gruntpaths.json', '.gruntpaths.json');
-    this.copy('grunt/aliases.js','grunt/aliases.js');
-
-    /**
-     * Helper method to edit the aliases grunt config as we add tasks.
-     */
-    this.addTaskAlias = function (alias, task) {
-      var _this = this;
-      var getAliases = function() {
-        return new Tree(_this.dest.read('grunt/aliases.js'));
-      };
-      var aliases = getAliases();
-      aliases.assignment('module.exports').key(alias).append(task);
-    };
-
-    this.sassTask = function() {
-      this.copy('grunt/sass.js','grunt/sass.js');
-      this.npmDevDep.push('grunt-sass');
-    };
-
-    // Only add for SASS. Others might be supported later.
-    if (this.css === 'sass') {
-      this.sassTask();
-    }
-
-
+    this.npmDevDep.concat(gulpModules);
+    this.copy('default-gulpfile.js', 'gulpfile.js');
+    this.directory('gulp', 'gulp');
   }
 });
 

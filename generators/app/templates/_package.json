@@ -1,5 +1,11 @@
 {
   "name": "<%= _.slugify(appname) %>",
   "version": "0.1.0",
-  "dependencies": {}
+  "description": "<%= description %>",
+  "author": "<%= user.name %> <<%= user.email %>>",
+  <% if (browserify) { %>"main": "scripts/index.js",<% } %>
+  "repository": {
+    "type": "git",
+    "url": "<%= repo %>"
+  }
 }
