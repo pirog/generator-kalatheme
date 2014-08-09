@@ -2,7 +2,6 @@
 'use strict';
 var path = require('path');
 var helpers = require('yeoman-generator').test;
-var assert = require('yeoman-generator').assert;
 var defaultPrompts;
 describe('kalatheme generator', function () {
   beforeEach(function (done) {
@@ -10,21 +9,17 @@ describe('kalatheme generator', function () {
       if (err) {
         return done(err);
       }
-      // Create the apps dependents.
-      var deps = [
-        '../../generators/app',
-        [helpers.createDummyGenerator('bootstrap:app'), 'bootstrap:app']
-      ];
       defaultPrompts  = {
-        'humanName': 'My Awesome Theme',
-        'name': 'my_awesome_theme',
-        'description': 'An awesome theme!',
-        'css' : 'sass',
-        'coffeescript': true,
-        'browserify': true,
-        'buildSystem': true
+        humanName: 'My Awesome Theme',
+        name: 'my_awesome_theme',
+        description: 'An awesome theme!',
+        css : 'sass',
+        coffeescript: true,
+        browserify: true,
+        buildSystem: true,
+        repo: 'git@github.com:kalamuna/generator-kalatheme.git'
       };
-      this.app = helpers.createGenerator('kalatheme:app', deps);
+      this.app = helpers.createGenerator('kalatheme:app', ['../../generators/app']);
       done();
     }.bind(this));
   });
@@ -42,7 +37,7 @@ describe('kalatheme generator', function () {
       'scss/main.scss',
       'dist/README.md',
       'templates/README.md',
-      'Gruntfile.js'
+      'gulpfile.js'
     ];
 
     helpers.mockPrompt(this.app, defaultPrompts);
@@ -54,12 +49,16 @@ describe('kalatheme generator', function () {
     });
   });
 
-  it('creates grunt tasks that can compile bootstrap sass', function(done){
-
+  it('creates gulp tasks that can compile bootstrap sass', function (done) {
     helpers.mockPrompt(this.app, defaultPrompts);
 
     this.app.run({}, function () {
-      assert.fileContent('Gruntfile.js', /load-grunt-config/);
+      helpers.assertFile('gulpfile.js');
+      helpers.assertFile('./gulp/index.js');
+      helpers.assertFile('./gulp/paths.js');
+      helpers.assertFile('./gulp/scripts.js');
+      helpers.assertFile('./gulp/styles.js');
+      helpers.assertFile('./gulp/watch.js');
       done();
     });
 

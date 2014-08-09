@@ -2,11 +2,8 @@
 
 > [Yeoman](http://yeoman.io) generator for building drupal subtheme's, especially bootstrap based ones.
 
-![Cartman holding an under construction sign.](http://www.textfiles.com/underconstruction/SouthBeachCove7978construct.gif)
-
-Still a work in progress, but checkback soon!
-
 ## Getting Started
+
 
 ### What is Yeoman?
 

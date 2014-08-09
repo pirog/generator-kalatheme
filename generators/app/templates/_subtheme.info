@@ -5,3 +5,7 @@ core = 7.x
 php = 5.3
 
 regions = content
+bootstrap = custom
+
+stylesheets[] = 'dist/css/<%= appname %>.css'
+javascript[] = 'dist/js/<%= appname %>.js'
