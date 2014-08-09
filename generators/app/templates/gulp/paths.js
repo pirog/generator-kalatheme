@@ -4,7 +4,7 @@ module.exports = {
     src: 'scss/**/*.scss',
     dest: 'dist/css',
     includes: ['../node_modules', '../bower_components'],
-    csslintrc: 'scss/.csslintrc.json'
+    csslintrc: '.csslintrc.json'
   },
   scripts: {
     src: 'scripts/index.js',

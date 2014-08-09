@@ -89,6 +89,7 @@ var KalathemeGenerator = yeoman.generators.Base.extend({
     this.copy('editorconfig', '.editorconfig');
     this.copy('jshintrc', '.jshintrc');
     this.copy('gitignore', '.gitignore');
+    this.copy('csslintrc', '.csslintrc.json');
     this.template('_package.json', 'package.json');
     this.template('_bower.json', 'bower.json');
     this.directory('dist', 'dist');
