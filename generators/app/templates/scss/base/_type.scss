@@ -1,0 +1,26 @@
+// Type Styles
+//
+// .light - Lighter
+// .dark - darker styles
+//
+// Markup:
+// <h1 {$modifiers}>A title</h1>
+// <h2 {$modifiers}>A title</h2>
+// <h3 {$modifiers}>A title</h3>
+// <h4 {$modifiers}>A title</h4>
+// <h5 {$modifiers}>A title</h5>
+// <h6 {$modifiers}>A title</h6>
+//
+// Styleguide 1.1
+h1 {
+  font-size: 58px;
+}
+
+
+h1.light {
+  color: #eee;
+}
+
+h1.dark {
+  color: #333;
+}

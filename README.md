@@ -1,15 +1,15 @@
-# generator-kalatheme [![Build Status](https://travis-ci.org/kalamuna/generator-kalatheme.svg)](https://travis-ci.org/kalamuna/generator-kalatheme)
+# generator-kalatheme [![Build Status](https://travis-ci.org/kalamuna/generator-kalatheme.svg)](https://travis-ci.org/kalamuna/generator-kalatheme) [![Dependency Status](https://gemnasium.com/kalamuna/generator-kalatheme.svg)](https://gemnasium.com/kalamuna/generator-kalatheme)
 
-> [Yeoman](http://yeoman.io) generator
-
+> [Yeoman](http://yeoman.io) generator for building drupal subtheme's, especially bootstrap based ones.
 
 ## Getting Started
+
 
 ### What is Yeoman?
 
 Trick question. It's not a thing. It's this guy:
 
-![](http://i.imgur.com/JHaAlBJ.png)
+![Yeoman character.](http://i.imgur.com/JHaAlBJ.png)
 
 Basically, he wears a top hat, lives in your computer, and waits for you to tell him what kind of application you wish to create.
 

@@ -1,20 +1,24 @@
 'use strict';
-// var util = require('util');
-// var path = require('path');
-var yeoman = require('yeoman-generator');
-var yosay = require('yosay');
-// var chalk = require('chalk');
 
-var appNameValidation = require('./appNameValidation');
+var yeoman = require('yeoman-generator'),
+yosay = require('yosay'),
+appNameValidation = require('./appNameValidation');
+
+
 
 var KalathemeGenerator = yeoman.generators.Base.extend({
   init: function () {
     this.pkg = require('../../package.json');
 
+    this.installDevDep = function () {
+      if (this.npmDevDep.length < 1) { return; }
+      var done = this.async();
+      this.npmInstall(this.npmDevDep, {saveDev: true}, done());
+    };
+
     this.on('end', function () {
-      if (!this.options['skip-install']) {
-        this.installDependencies();
-      }
+      this.installDependencies();
+      this.installDevDep();
     });
   },
 
@@ -36,7 +40,7 @@ var KalathemeGenerator = yeoman.generators.Base.extend({
       default: this.appname,
       validate: appNameValidation,
       filter: function (input) {
-        return input.toLowerCase().replace(/[^a-z0-9]+/,'_').substr(0,32);
+        return input.toLowerCase().replace(/[^a-z0-9]+/, '_').substr(0, 32);
       }
     }, {
       type: 'input',
@@ -44,20 +48,24 @@ var KalathemeGenerator = yeoman.generators.Base.extend({
       message: 'Subtheme description:',
       default: 'An aweseome theme powered by kalatheme and yeoman!'
     }, {
+      type: 'input',
+      name: 'repo',
+      message: 'Repository URL:'
+    }, {
       type: 'list',
       name: 'css',
       message: 'In what format would you like the use for stylesheets?',
-      choices: ['sass', 'less', 'stylus', 'css'],
+      choices: ['sass', 'css'],
       default: 'sass'
-    }, {
-      type: 'confirm',
-      name: 'coffeescript',
-      message: 'Do you want to use CoffeeScript? (If not, we will give you vanilla JS.)',
-      default: true
     }, {
       type: 'confirm',
       name: 'browserify',
       message: 'Do you want to use CommonJS style modules with browserify?',
+      default: true
+    }, {
+      type: 'confirm',
+      name: 'buildSystem',
+      message: 'Do you want to use gulp to help build your theme?',
       default: true
     }];
 
@@ -67,8 +75,10 @@ var KalathemeGenerator = yeoman.generators.Base.extend({
       this.appname = props.name;
       this.css = props.css;
       this.description = props.description;
-      this.coffeescript = props.coffeescript;
+      this.coffeescript = false; // props.coffeescript;
       this.browserify = props.browserify;
+      this.buildSystem = props.buildSystem;
+      this.repo = props.repo;
       done();
     }.bind(this));
   },
@@ -82,17 +92,13 @@ var KalathemeGenerator = yeoman.generators.Base.extend({
     this.template('_package.json', 'package.json');
     this.template('_bower.json', 'bower.json');
     this.directory('dist', 'dist');
+    this.template('_README.md', 'README.md');
   },
 
   /**
    * Scaffold out the styles for the subtheme.
    */
   styles: function () {
-    this.composeWith('bootstrap:app', {
-      options: {
-        format: this.css
-      }
-    });
     if (this.css === 'sass') {
       this.directory('scss', 'scss');
     }
@@ -112,6 +118,16 @@ var KalathemeGenerator = yeoman.generators.Base.extend({
       this.template('script/_vanilla' + ext, 'script/' + this._.this.appname  + ext);
     }
   },
+
+
+  bootstrap: function () {
+    var done = this.async();
+    // The SASS version has wacky JS so let's include both.
+    var bower = ['bootstrap'];
+    if (this.css === 'sass') { bower.push('bootstrap-sass-official'); }
+
+    this.bowerInstall(bower, {save: true},  done());
+  },
   /**
    * PHP related build tasks.
    */
@@ -119,6 +135,36 @@ var KalathemeGenerator = yeoman.generators.Base.extend({
     this.directory('templates', 'templates');
     this.template('_template.php', 'template.php');
     this.template('_subtheme.info', this.appname + '.info');
+  },
+
+  gulp: function () {
+    if (!this.buildSystem) { return; }
+
+    var done = this.async();
+
+    var gulpModules = [
+      'gulp',
+      'del',
+      'gulp-autoprefixer',
+      'gulp-browserify',
+      'gulp-csscomb',
+      'gulp-csslint',
+      'gulp-cssmin',
+      'gulp-kss',
+      'gulp-rename',
+      'gulp-sass',
+      'gulp-sourcemaps',
+      'gulp-uglify',
+      'gulp-imagemin',
+      'gulp-newer'
+    ];
+
+
+    this.npmDevDep = this.npmDevDep ?
+      this.npmDevDep.concat(gulpModules) : gulpModules;
+    this.copy('default-gulpfile.js', 'gulpfile.js');
+    this.directory('gulp', 'gulp');
+    done();
   }
 });
 
