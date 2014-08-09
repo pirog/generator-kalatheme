@@ -1,4 +1,4 @@
-/*global: window, jQuery, Drupal */
+/*global: window */
 
 /**
  * @file
@@ -6,8 +6,10 @@
  */
 
 'use strict';
+// Since we are using module system we don't have to worry
+// about wrapper functions.
 var $ = window.jQuery;
-require('bootstap')();
+require('bootstrap')();
 
 $(function () {
   console.log('it works :)');
