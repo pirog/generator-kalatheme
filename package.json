@@ -1,6 +1,6 @@
 {
   "name": "generator-kalatheme",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Kalatheme subtheme generator powered by yeoman",
   "license": "MIT",
   "main": "generators/app/index.js",
@@ -24,9 +24,8 @@
   ],
   "dependencies": {
     "yeoman-generator": ">=0.17.0",
-    "chalk": ">=0.5.0",
-    "yosay": ">=0.3.0",
-    "ast-query": "~0.2.4"
+    "chalk": "~0.4.0",
+    "yosay": ">=0.3.0"
   },
   "devDependencies": {
     "mocha": "*",
@@ -36,7 +35,6 @@
     "gulp": "^3.8.6"
   },
   "peerDependencies": {
-    "yo": ">=1.0.0",
-    "generator-bootstrap": ">=1.0.0"
+    "yo": ">=1.0.0"
   }
 }

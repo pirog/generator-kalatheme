@@ -14,7 +14,7 @@ module.exports = function (gulp) {
   require('./images')(gulp);
 
   gulp.task('clean', function (cb) {
-    return del([paths.build, paths.docs.assets], cb);
+    return del([paths.build], cb);
   });
   gulp.task('compile', ['styles', 'scripts', 'images']);
   gulp.task('default', ['compile']);

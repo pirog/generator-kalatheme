@@ -9,11 +9,6 @@ describe('kalatheme generator', function () {
       if (err) {
         return done(err);
       }
-      // Create the apps dependents.
-      var deps = [
-        '../../generators/app',
-        [helpers.createDummyGenerator('bootstrap:app'), 'bootstrap:app']
-      ];
       defaultPrompts  = {
         humanName: 'My Awesome Theme',
         name: 'my_awesome_theme',
@@ -24,7 +19,7 @@ describe('kalatheme generator', function () {
         buildSystem: true,
         repo: 'git@github.com:kalamuna/generator-kalatheme.git'
       };
-      this.app = helpers.createGenerator('kalatheme:app', deps);
+      this.app = helpers.createGenerator('kalatheme:app', ['../../generators/app']);
       done();
     }.bind(this));
   });
@@ -54,7 +49,7 @@ describe('kalatheme generator', function () {
     });
   });
 
-  it('creates gulp tasks that can compile bootstrap sass', function(done) {
+  it('creates gulp tasks that can compile bootstrap sass', function (done) {
     helpers.mockPrompt(this.app, defaultPrompts);
 
     this.app.run({}, function () {

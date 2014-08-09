@@ -7,9 +7,9 @@ module.exports = {
     csslintrc: 'scss/.csslintrc.json'
   },
   scripts: {
-    src: 'scripts/index.coffee',
+    src: 'scripts/index.js',
     dest: 'dist/js',
-    watch: 'scripts/**/*.{coffee,js}'
+    watch: 'scripts/**/*.{js}'
   },
   images: {
     src: 'img_src/**/*.{svg, png, jpg, gif}',

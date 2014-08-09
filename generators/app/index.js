@@ -4,7 +4,6 @@ var yeoman = require('yeoman-generator'),
 yosay = require('yosay'),
 appNameValidation = require('./appNameValidation');
 
-var cache = {};
 
 
 var KalathemeGenerator = yeoman.generators.Base.extend({
@@ -18,10 +17,8 @@ var KalathemeGenerator = yeoman.generators.Base.extend({
     };
 
     this.on('end', function () {
-      if (!this.options['skip-install']) {
-        this.installDependencies();
-        this.installDevDep();
-      }
+      this.installDependencies();
+      this.installDevDep();
     });
   },
 
@@ -53,7 +50,7 @@ var KalathemeGenerator = yeoman.generators.Base.extend({
     }, {
       type: 'input',
       name: 'repo',
-      meassage: 'Repository URL:'
+      message: 'Repository URL:'
     }, {
       type: 'list',
       name: 'css',
@@ -95,18 +92,13 @@ var KalathemeGenerator = yeoman.generators.Base.extend({
     this.template('_package.json', 'package.json');
     this.template('_bower.json', 'bower.json');
     this.directory('dist', 'dist');
-    this.template('_README.md', 'README');
+    this.template('_README.md', 'README.md');
   },
 
   /**
    * Scaffold out the styles for the subtheme.
    */
   styles: function () {
-    this.composeWith('bootstrap:app', {
-      options: {
-        format: this.css
-      }
-    });
     if (this.css === 'sass') {
       this.directory('scss', 'scss');
     }
@@ -126,6 +118,16 @@ var KalathemeGenerator = yeoman.generators.Base.extend({
       this.template('script/_vanilla' + ext, 'script/' + this._.this.appname  + ext);
     }
   },
+
+
+  bootstrap: function () {
+    var done = this.async();
+    // The SASS version has wacky JS so let's include both.
+    var bower = ['bootstrap'];
+    if (this.css === 'sass') { bower.push('bootstrap-sass-official'); }
+
+    this.bowerInstall(bower, {save: true},  done());
+  },
   /**
    * PHP related build tasks.
    */
@@ -138,6 +140,8 @@ var KalathemeGenerator = yeoman.generators.Base.extend({
   gulp: function () {
     if (!this.buildSystem) { return; }
 
+    var done = this.async();
+
     var gulpModules = [
       'gulp',
       'del',
@@ -146,22 +150,21 @@ var KalathemeGenerator = yeoman.generators.Base.extend({
       'gulp-csscomb',
       'gulp-csslint',
       'gulp-cssmin',
-      'gulp-gh-pages',
       'gulp-kss',
       'gulp-rename',
       'gulp-sass',
       'gulp-sourcemaps',
       'gulp-uglify',
       'gulp-imagemin',
-      'gulp-newer',
-      'yargs'
+      'gulp-newer'
     ];
 
 
-    this.npmDevDep = this.npmDevDep ? this.npmDevDep : [];
-    this.npmDevDep.concat(gulpModules);
+    this.npmDevDep = this.npmDevDep ?
+      this.npmDevDep.concat(gulpModules) : gulpModules;
     this.copy('default-gulpfile.js', 'gulpfile.js');
     this.directory('gulp', 'gulp');
+    done();
   }
 });
 
